@@ -1,0 +1,5 @@
+{
+  "Token": "Discord bot token",
+  "Prefix": "Command prefix",
+  "Channel": "Text channel id"
+}
