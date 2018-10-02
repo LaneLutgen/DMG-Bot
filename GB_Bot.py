@@ -7,7 +7,7 @@ import requests
 import math
 
 # Check config
-configFile = os.path.dirname(__file__) + "config.json"
+configFile = os.getcwd() + "/config.json"
 
 if not os.path.isfile(configFile):
     file = open("config.json", "w+")
@@ -15,7 +15,7 @@ if not os.path.isfile(configFile):
 Please enter bot info in the config file before continuing.""")
 with open(configFile) as f:
     config = json.load(f)
-    print("Loaded config.json.")
+    print("Loaded config.json.")    
     if not "token" in config:
         sys.exit("No token provided in config.")
     token = config["token"]
