@@ -2,51 +2,74 @@ import discord
 import os
 import sys
 import json
+from random import randint
+import requests
+import math
 
-if os.path.isfile('/home/pi/GameBoyBot/config.json') == False:
-    file = open('/home/pi/GameBoyBot/config.json', 'w+')
-    sys.exit('Created Config file')
-else:
-    print('Config Present')
+# Check config
+configFile = os.path.dirname(__file__) + "config.json"
 
-with open('/home/pi/GameBoyBot/config.json', 'r', encoding='utf-8') as config_file:
-    config = config_file.read()
-    config = json.loads(config)
-    print('Loaded Config file')
+if not os.path.isfile(configFile):
+    file = open("config.json", "w+")
+    sys.exit("""Created config.json.
+Please enter bot info in the config file before continuing.""")
+with open(configFile) as f:
+    config = json.load(f)
+    print("Loaded config.json.")
+    if not "token" in config:
+        sys.exit("No token provided in config.")
+    token = config["token"]
+print("Config OK")
 
-token = (config['Token'])
-if token == '':
-    sys.exit('No Token provided')
-pfx = (config['Prefix'])
+prefix = "<@200964739650682881> "
 
-cH = (config['Channel'])
-if cH == '':
-    sys.exit('No Channel provided')
 
-class TestBot(discord.Client):
-    def __init__(self):
-        super().__init__()
+# Bot
+client = discord.Client()
 
-    async def on_ready(self):
-        print('===========================================')
-        print('DMG 1.0 By HDR')
-        print('Logged in as', self.user.name)
-        print('===========================================')
+@client.event
+async def on_ready():
+    print("""=========================
+        DMG Bot
+Logged in as {}
+=========================""".format(client.user.name))
 
-    async def on_message(self, message):
-        TChannel = self.get_channel(cH)
+@client.event
+async def on_message(message):
+    if message.content.startswith(prefix): message.content = message.content.split(prefix)[1]
 
-        if message.content.startswith(pfx):
-            Newmsg = str(message.content).replace(pfx, "")
-            await self.delete_message(message)
-            async for message in self.logs_from(TChannel, limit=50):
-                if message.author == self.user:
-                    msgID = message.id
-                    msg = await self.get_message(TChannel, msgID)
-                    await self.edit_message(msg, new_content=Newmsg)
+    if message.content.startswith("resources"):
+        newText = message.content.split("resources")[1]
+        for x in message.author.roles:
+            if x.name == "Yokoi Watch": break
+        else:
+            await client.send_message(message.channel, "You do not have permission to do that.")
+            return
+        await client.delete_message(message)
+        async for x in client.logs_from(message.channel, 10):
+            if x.author == client.user:
+                await client.edit_message(x, newText)
+                break
 
-        elif message.content.startswith("ph" + pfx):
-            await self.send_message(message.channel, "Placeholder Message")
+    elif message.content.startswith("roll"):
+        await client.send_typing(message.channel)
+        await client.send_message(message.channel, "I rolled a **" + str(randint(1, 6)) + "**")
+    
+    elif message.content.startswith(("currency", "convert", "cv", "cc")):
+        await client.send_typing(message.channel)
+        text = message.content.split()
+        try:
+            value = float(text[1])
+            one = text[2].upper()
+            two = text[3].upper()
+        except:
+            await client.send_message(message.channel, "Please format your request properly.")
+            return
+        request = requests.get("https://free.currencyconverterapi.com/api/v6/convert?q={}_{}&compact=y".format(one, two)).json()
+        if not request:
+            await client.send_message(message.channel, "Please enter a proper currency.")
+            return
+        conversion = round(request[one + "_" + two]["val"] * value, 2)
+        await client.send_message(message.channel, "{:,}".format(conversion) + " **" + two + "**")
 
-bot = TestBot()
-bot.run(token)
+client.run(token)
