@@ -21,7 +21,7 @@ with open(configFile) as f:
     token = config["token"]
 print("Config OK")
 
-prefix = "<@200964739650682881> "
+prefix = "<@419539233850785792> "
 
 
 # Bot
