@@ -55,12 +55,10 @@ async def on_message(message):
         await client.send_typing(message.channel)
         text = message.content.split()
         try:
-            dice = (text[1])
         except:
             await client.send_message(message.channel, "I rolled a **" + str(randint(1, 6)) + "**")
             return
-        if dice == "D20":
-            await client.send_message(message.channel, "I rolled a **" + str(randint(1, 20)) + "**")
+        await client.send_message(message.channel, "I rolled a **" + str(randint(1, dice)) + "**")
 
     elif message.content.startswith(("currency", "convert", "cv", "cc")):
         await client.send_typing(message.channel)
