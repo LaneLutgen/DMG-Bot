@@ -1,80 +1,69 @@
-import discord
 import os
-import sys
-import json
-from random import randint
-import requests
-import math
+from discord.ext import commands
+
+from os import listdir
+from os.path import isfile, join
+
+import traceback
+import config
+
 
 # Check config
 configFile = os.getcwd() + "/config.json"
 
-if not os.path.isfile(configFile):
-    file = open("config.json", "w+")
-    sys.exit("""Created config.json.
-Please enter bot info in the config file before continuing.""")
-with open(configFile) as f:
-    config = json.load(f)
-    print("Loaded config.json.")    
-    if not "token" in config:
-        sys.exit("No token provided in config.")
-    token = config["token"]
-print("Config OK")
+# Where extensions are stored
+cogs_dir = "cogs"
+
+# if not os.path.isfile(configFile):
+#     file = open("config.json", "w+")
+#     sys.exit("""Created config.json.
+# Please enter bot info in the config file before continuing.""")
+# with open(configFile) as f:
+#     config = json.load(f)
+#     print("Loaded config.json.")    
+#     if not "token" in config:
+#         sys.exit("No token provided in config.")
+#     token = config["token"]
+# print("Config OK")
 
 prefix = "<@419539233850785792> "
 
 
 # Bot
-client = discord.Client()
+bot = commands.Bot(command_prefix='?')
 
-@client.event
+@bot.event
 async def on_ready():
     print("""=========================
         DMG Bot
 Logged in as {}
-=========================""".format(client.user.name))
+=========================""".format(bot.user.name))
 
-@client.event
-async def on_message(message):
-    if message.content.startswith(prefix): message.content = message.content.split(prefix)[1]
+# @client.event
+# async def on_message(message):
+#     if message.content.startswith(prefix): message.content = message.content.split(prefix)[1]
 
-    if message.content.startswith("resources"):
-        newText = message.content.split("resources")[1]
-        for x in message.author.roles:
-            if x.name == "Yokoi Watch": break
-        else:
-            await client.send_message(message.channel, "You do not have permission to do that.")
-            return
-        await client.delete_message(message)
-        async for x in client.logs_from(message.channel, 10):
-            if x.author == client.user:
-                await client.edit_message(x, newText)
-                break
+#     if message.content.startswith("resources"):
+#         newText = message.content.split("resources")[1]
+#         for x in message.author.roles:
+#             if x.name == "Yokoi Watch": break
+#         else:
+#             await client.send_message(message.channel, "You do not have permission to do that.")
+#             return
+#         await client.delete_message(message)
+#         async for x in client.logs_from(message.channel, 10):
+#             if x.author == client.user:
+#                 await client.edit_message(x, newText)
+#                 break
 
-    elif message.content.startswith("roll"):
-        await client.send_typing(message.channel)
-        text = message.content.split()
+
+if __name__ == "__main__":
+    for extension in ["cogs."+f.replace(".py","") for f in listdir("cogs") if isfile(join("cogs", f))]:
         try:
-        except:
-            await client.send_message(message.channel, "I rolled a **" + str(randint(1, 6)) + "**")
-            return
-        await client.send_message(message.channel, "I rolled a **" + str(randint(1, dice)) + "**")
+            bot.load_extension(extension)
+            print(f"Loaded extension {extension}")
+        except Exception as e:
+            print(f'Failed to load extension {extension}.')
+            traceback.print_exc()
 
-    elif message.content.startswith(("currency", "convert", "cv", "cc")):
-        await client.send_typing(message.channel)
-        text = message.content.split()
-        try:
-            value = float(text[1])
-            one = text[2].upper()
-            two = text[3].upper()
-        except:
-            await client.send_message(message.channel, "Please format your request properly.")
-            return
-        request = requests.get("https://free.currencyconverterapi.com/api/v6/convert?q={}_{}&compact=y".format(one, two)).json()
-        if not request:
-            await client.send_message(message.channel, "Please enter a proper currency.")
-            return
-        conversion = round(request[one + "_" + two]["val"] * value, 2)
-        await client.send_message(message.channel, "{:,}".format(conversion) + " **" + two + "**")
-
-client.run(token)
+bot.run(config.BOT_KEY)
