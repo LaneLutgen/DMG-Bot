@@ -2,6 +2,8 @@ import aiohttp
 from discord.ext import commands
 
 class CurrencyConverter(object):
+    """Provides currency conversion functions."""
+    
     def __init__(self, bot):
         self.bot = bot
         self.currencies = None

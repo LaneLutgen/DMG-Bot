@@ -1,13 +1,14 @@
 from discord.ext import commands
-
 import random
 
 
 class Dice(object):
+    """Allows you to throw some dice using standard dice notation."""
+    
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
+    @commands.command(aliases=["dice"])
     async def roll(self, ctx, dicetype: str="1d6"):
         """Rolls a dice using standard dice notation."""
 
@@ -27,7 +28,7 @@ class Dice(object):
             await ctx.send("⚠️ One-sided dice do not exist. Try more sides.")
             return
 
-        result = sum([random.randint(1,sides) for _ in range(amount)])
+        result = sum([random.randint(1, sides) for _ in range(amount)])
 
         await ctx.send(f"{ctx.author.mention} 🎲 I rolled a {result} for you.")
 

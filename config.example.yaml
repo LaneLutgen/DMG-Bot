@@ -1,0 +1,16 @@
+# General bot configuration
+bot:
+  discord_key: ""
+  command_prefix: ["!"]
+  admin_minimum_role: "" #The lowest role that can use higher administrative functions, specify the exact name.
+  extensions: [
+    "cogs.dice",
+    "cogs.currency",
+    "cogs.echo",
+    "cogs.show_image",
+    "cogs.game_of_the_day.gotd" ]
+
+# Used by the show_image cog
+show_image:
+  cse_api_key: ""
+  cse_cx: ""

@@ -1,64 +1,23 @@
-import os
 from discord.ext import commands
-
-from os import listdir
-from os.path import isfile, join
+from discord import Game
 
 import traceback
-import config
+from config import get_section
 
-
-# Check config
-configFile = os.getcwd() + "/config.json"
-
-# Where extensions are stored
-cogs_dir = "cogs"
-
-# if not os.path.isfile(configFile):
-#     file = open("config.json", "w+")
-#     sys.exit("""Created config.json.
-# Please enter bot info in the config file before continuing.""")
-# with open(configFile) as f:
-#     config = json.load(f)
-#     print("Loaded config.json.")    
-#     if not "token" in config:
-#         sys.exit("No token provided in config.")
-#     token = config["token"]
-# print("Config OK")
-
-prefix = "<@419539233850785792> "
-
-
-# Bot
-bot = commands.Bot(command_prefix='?')
-
-@bot.event
-async def on_ready():
-    print("""=========================
-        DMG Bot
-Logged in as {}
-=========================""".format(bot.user.name))
-
-# @client.event
-# async def on_message(message):
-#     if message.content.startswith(prefix): message.content = message.content.split(prefix)[1]
-
-#     if message.content.startswith("resources"):
-#         newText = message.content.split("resources")[1]
-#         for x in message.author.roles:
-#             if x.name == "Yokoi Watch": break
-#         else:
-#             await client.send_message(message.channel, "You do not have permission to do that.")
-#             return
-#         await client.delete_message(message)
-#         async for x in client.logs_from(message.channel, 10):
-#             if x.author == client.user:
-#                 await client.edit_message(x, newText)
-#                 break
-
+# Enter extensions you want to load here
+extensions = get_section("bot").get("extensions")
 
 if __name__ == "__main__":
-    for extension in ["cogs."+f.replace(".py","") for f in listdir("cogs") if isfile(join("cogs", f))]:
+    bot = commands.Bot(command_prefix=get_section("bot").get("command_prefix", "!"),pm_help=True)
+
+    @bot.event
+    async def on_ready():
+        print('Connected!')
+        print(f'Username: {bot.user.name}')
+        print(f'ID: {bot.user.id}')
+        await bot.change_presence(activity=Game(name="Retro Games"))
+
+    for extension in extensions:
         try:
             bot.load_extension(extension)
             print(f"Loaded extension {extension}")
@@ -66,4 +25,5 @@ if __name__ == "__main__":
             print(f'Failed to load extension {extension}.')
             traceback.print_exc()
 
-bot.run(config.BOT_KEY)
+    print("Connecting to discord")
+    bot.run(get_section("bot").get("discord_key"))
