@@ -19,7 +19,7 @@ class GoogleImageSearch(object):
         if not self.cse_cx:
             raise Exception("Key 'cse_cx' not found or not set.")
 
-    @commands.command()
+    @commands.command(aliases=["rmimage","rm"])
     async def snip(self, ctx):
         """
         Deletes the most recent image. The last five images can be deleted.
@@ -28,7 +28,7 @@ class GoogleImageSearch(object):
             last_image = self.last_images.pop()
             await last_image.edit(content="[SNIP]", embed=None)
 
-    @commands.command()
+    @commands.command(aliases=["image"])
     async def show(self, ctx, *, arg: str):
         """
         Searches google images and shows the first image found. Safe search is on.
