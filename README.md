@@ -17,7 +17,7 @@ These instructions will get you a copy of the project up and running on your loc
 What things you need to install the software and how to install them
 
 ```
-Python 3+
+Python 3.6+
 ```
 
 ### Installing
@@ -33,6 +33,10 @@ $ source bin/activate
 Install the required python packages with pip.
 ```
 $ pip install -r requirements.txt
+```
+Install the rewrite branch version of Discord.py
+```
+$ pip install -U https://github.com/Rapptz/discord.py/archive/rewrite.zip#egg=discord.py[voice]
 ```
 Rename `config.example.py` and add your discord bot key (and optionally your CSE keys) to it.
 ```

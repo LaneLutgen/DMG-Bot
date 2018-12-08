@@ -30,7 +30,7 @@ class Dice(object):
 
         result = sum([random.randint(1, sides) for _ in range(amount)])
 
-        await ctx.send(f"{ctx.author.mention} 🎲 I rolled a {result} for you.")
+        await ctx.send(f"🎲 I rolled a {result} for you.")
 
 
 def setup(bot):

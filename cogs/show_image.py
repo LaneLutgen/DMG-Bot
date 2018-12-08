@@ -19,7 +19,7 @@ class GoogleImageSearch(object):
         if not self.cse_cx:
             raise Exception("Key 'cse_cx' not found or not set.")
 
-    @commands.command()
+    @commands.command(aliases=["rmimage","rm"])
     async def snip(self, ctx):
         """
         Deletes the most recent image. The last five images can be deleted.
@@ -28,7 +28,8 @@ class GoogleImageSearch(object):
             last_image = self.last_images.pop()
             await last_image.edit(content="[SNIP]", embed=None)
 
-    @commands.command()
+
+    @commands.command(aliases=["image"])
     @commands.cooldown(3, 60, commands.BucketType.user)
     async def show(self, ctx, *, arg: str):
         """
@@ -40,10 +41,10 @@ class GoogleImageSearch(object):
             if image_search is not None:
                 if "items" in image_search:
                     image_url = image_search["items"][0]["link"]
-                    self.last_images.append(await ctx.send("%s: " % ctx.author.mention + image_url))
+                    self.last_images.append(await ctx.send(image_url))
                     return None  # Exit
 
-            await ctx.send("%s, I'm sorry. I couldn't find any images for that search." % ctx.author.mention)
+            await ctx.send("%s, I'm sorry. I couldn't find any images for that search.")
 
     @show.error
     async def handle_errors(self, ctx, error):
