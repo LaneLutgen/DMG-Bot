@@ -28,7 +28,9 @@ class GoogleImageSearch(object):
             last_image = self.last_images.pop()
             await last_image.edit(content="[SNIP]", embed=None)
 
+
     @commands.command(aliases=["image"])
+    @commands.cooldown(3, 60, commands.BucketType.user)
     async def show(self, ctx, *, arg: str):
         """
         Searches google images and shows the first image found. Safe search is on.
@@ -48,6 +50,8 @@ class GoogleImageSearch(object):
     async def handle_errors(self, ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
             await ctx.send('Please tell me what to search for.', delete_after=5)
+        elif isinstance(error, commands.CommandOnCooldown):
+            await ctx.send('Sorry, the command is on cooldown for you right now. Try again in 60 seconds.')
 
     async def google_image_search(self, query):
         url = "https://www.googleapis.com/customsearch/v1"
