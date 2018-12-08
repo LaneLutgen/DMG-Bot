@@ -39,10 +39,10 @@ class GoogleImageSearch(object):
             if image_search is not None:
                 if "items" in image_search:
                     image_url = image_search["items"][0]["link"]
-                    self.last_images.append(await ctx.send("%s: " % ctx.author.mention + image_url))
+                    self.last_images.append(await ctx.send("%s: " % image_url))
                     return None  # Exit
 
-            await ctx.send("%s, I'm sorry. I couldn't find any images for that search." % ctx.author.mention)
+            await ctx.send("%s, I'm sorry. I couldn't find any images for that search.")
 
     @show.error
     async def handle_errors(self, ctx, error):

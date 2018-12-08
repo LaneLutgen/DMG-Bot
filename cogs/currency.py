@@ -40,7 +40,7 @@ class CurrencyConverter(object):
 
         conversion = round(amount * conversion_rate, 2)
 
-        await ctx.send(f"{ctx.author.mention} 💸 {amount} {from_currency} -> {conversion} {to_currency}")
+        await ctx.send(f"💸 {amount} {from_currency} -> {conversion} {to_currency}")
 
     @convert.error
     async def handle_errors(self, ctx, error):
