@@ -1,5 +1,6 @@
 import aiohttp
 from discord.ext import commands
+from config import get_section
 
 class CurrencyConverter(object):
     """Provides currency conversion functions."""
@@ -7,8 +8,13 @@ class CurrencyConverter(object):
     def __init__(self, bot):
         self.bot = bot
         self.currencies = None
+        self.api_key = get_section("currency").get("api_key")
 
-    @commands.command(aliases=["currency","cc","cv"])
+        if not self.api_key:
+            raise Exception("Key 'api_key' not found or not set. To use this cog, get a key from https://www.currencyconverterapi.com/")
+
+
+    @commands.command(aliases=["currency", "cc", "cv"])
     async def convert(self, ctx, amount: float, from_currency: str, to_currency: str):
         """Converts currency."""
 
@@ -55,7 +61,7 @@ class CurrencyConverter(object):
     async def get_conversion_rate(self, from_currency, to_currency):
         url = "https://free.currencyconverterapi.com/api/v6/convert"
 
-        payload = {"q": f"{from_currency}_{to_currency}", "compact": "ultra"}
+        payload = {"q": f"{from_currency}_{to_currency}", "compact": "ultra", "apiKey": self.api_key}
 
         async with aiohttp.ClientSession() as session:
             async with session.get(url, params=payload) as r:
