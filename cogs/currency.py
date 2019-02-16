@@ -74,8 +74,10 @@ class CurrencyConverter(object):
     async def get_currencies(self):
         url = "https://free.currencyconverterapi.com/api/v6/currencies"
 
+        payload = {"apiKey": self.api_key}
+
         async with aiohttp.ClientSession() as session:
-            async with session.get(url) as r:
+            async with session.get(url, params=payload) as r:
                 if r.status == 200:
                     js = await r.json()
                     return js["results"]
