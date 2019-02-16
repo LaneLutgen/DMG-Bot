@@ -8,7 +8,8 @@ bot:
     "cogs.currency",
     "cogs.echo",
     "cogs.show_image",
-    "cogs.game_of_the_day.gotd" ]
+    "cogs.game_of_the_day.gotd",
+    "cogs.stats"    ]
 
 # Used by the show_image cog
 show_image:
