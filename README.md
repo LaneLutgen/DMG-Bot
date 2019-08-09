@@ -7,7 +7,6 @@ Currently provides the following features:
 * Dice roller
 * Currency converter (using http://currencyconverterapi.com)
 * Google Image search (using Google CSE)
-* 
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
@@ -34,14 +33,10 @@ Install the required python packages with pip.
 ```
 $ pip install -r requirements.txt
 ```
-Install the rewrite branch version of Discord.py
-```
-$ pip install -U https://github.com/Rapptz/discord.py/archive/rewrite.zip#egg=discord.py[voice]
-```
 Rename `config.example.py` and add your discord bot key (and optionally your CSE keys) to it.
 ```
-$ mv config.example.py config.py
-$ vim/emacs/nano config.py
+$ mv config.example.yaml config.yaml
+$ nano config.yaml
 ...
 BOT_KEY="YOUR BOT KEY"
 ```

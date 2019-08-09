@@ -1,4 +1,5 @@
 from discord import Game
+from discord.ext import commands
 import traceback
 import asyncio
 from crontab import CronTab
@@ -7,7 +8,7 @@ import os
 import random
 
 
-class Gotd(object):
+class Gotd(commands.Cog):
     """Sets the bot's current game activity to a random game from a json file."""
 
     def __init__(self, bot):

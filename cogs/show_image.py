@@ -4,7 +4,7 @@ from collections import deque
 from config import get_section
 
 
-class GoogleImageSearch(object):
+class GoogleImageSearch(commands.Cog):
     """Allows you to search google images for a term. Also has a function to remove the last image, if it's not what you wanted."""
     
     def __init__(self, bot):

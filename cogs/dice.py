@@ -2,7 +2,7 @@ from discord.ext import commands
 import random
 
 
-class Dice(object):
+class Dice(commands.Cog):
     """Allows you to throw some dice using standard dice notation."""
     
     def __init__(self, bot):

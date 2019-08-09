@@ -7,7 +7,7 @@ import re
 from config import get_section
 
 
-class Echo(object):
+class Echo(commands.Cog):
     """Provides tools that allow moderators to chat through the bot. Useful for managing sticky posts."""
 
     least_role_needed = get_section("bot").get("admin_minimum_role")

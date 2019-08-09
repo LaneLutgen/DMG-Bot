@@ -5,7 +5,7 @@ import time
 
 start_time = time.time()
 
-class Stats(object):
+class Stats(commands.Cog):
 	"""Reports server stats."""
 	
 	def __init__(self, bot):
