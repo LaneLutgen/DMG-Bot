@@ -24,6 +24,7 @@ class Gotd(commands.Cog):
         finally:
             f.close()
 
+    @commands.Cog.listener()
     async def on_ready(self):
         await self.bot.change_presence(activity=Game(name=random.choice(self.game_list)))
 
