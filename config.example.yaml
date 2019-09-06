@@ -9,7 +9,8 @@ bot:
     "cogs.echo",
     "cogs.show_image",
     "cogs.game_of_the_day.gotd",
-    "cogs.stats"    ]
+    "cogs.stats",
+    "cogs.gerber_renderer.render"]
 
 # Used by the show_image cog
 show_image:

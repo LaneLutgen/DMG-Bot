@@ -10,8 +10,8 @@ import random
 
 class Gotd(commands.Cog):
     """Sets the bot's current game activity to a random game from a json file."""
-
     def __init__(self, bot):
+        print("Init running")
         self.bot = bot
         self.interval = "@daily"
 
@@ -36,12 +36,12 @@ class Gotd(commands.Cog):
             traceback.format_exc()
 
     async def PlayRandomGame(self, interval):
+        print("PlayRandomGame running")
         await self.bot.wait_until_ready()
         cron = CronTab(interval)
         while True:
             await asyncio.sleep(cron.next(default_utc=True))
             await self.bot.change_presence(activity=Game(name=random.choice(self.game_list)))
-
 
 def setup(bot):
     bot.add_cog(Gotd(bot))
