@@ -10,7 +10,8 @@ bot:
     "cogs.show_image",
     "cogs.game_of_the_day.gotd",
     "cogs.stats",
-    "cogs.gerber_renderer.render"]
+    "cogs.gerber_renderer.render",
+    "cogs.imgurAlbumHandler"]
 
 # Used by the show_image cog
 show_image:
