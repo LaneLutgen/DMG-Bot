@@ -46,6 +46,23 @@ class GoogleImageSearch(commands.Cog):
 
             await ctx.send("%s, I'm sorry. I couldn't find any images for that search.")
 
+    @commands.command(aliases=["simage", "spoilerimage"])
+    @commands.cooldown(3, 60, commands.BucketType.user)
+    async def spoiler(self, ctx, *, arg: str):
+        """
+        Searches google images and shows the first image found. Safe search is on. Spoiler.
+        """
+        async with ctx.channel.typing():
+            image_search = await self.google_image_search(arg)
+
+            if image_search is not None:
+                if "items" in image_search:
+                    image_url = image_search["items"][0]["link"]
+                    self.last_images.append(await ctx.send('||'+image_url+'||'))
+                    return None  # Exit
+
+            await ctx.send("%s, I'm sorry. I couldn't find any images for that search.")
+
     @show.error
     async def handle_errors(self, ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):

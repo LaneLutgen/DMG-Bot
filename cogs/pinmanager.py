@@ -31,6 +31,7 @@ class Pinmanager(commands.Cog):
     @has_at_least_role(least_role_needed)
     async def clearPins(self, ctx):
         removedPins = 0
+        await ctx.send("Attempting to remove old pins, this may take a while")
         async for msg in ctx.message.channel.history(limit=5000):
             if (msg.pinned & ((datetime.datetime.now() - msg.created_at).days > 30)):
                     await msg.unpin()

@@ -11,7 +11,8 @@ bot:
     "cogs.game_of_the_day.gotd",
     "cogs.stats",
     "cogs.gerber_renderer.render",
-    "cogs.imgurAlbumHandler"]
+    "cogs.imgurAlbumHandler",
+    "cogs.pinmanager]
 
 # Used by the show_image cog
 show_image:

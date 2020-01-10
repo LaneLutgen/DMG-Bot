@@ -206,3 +206,5 @@ $RECYCLE.BIN/
 .idea/
 
 config.yaml
+autoranker.py
+strikeManager.py
