@@ -208,3 +208,4 @@ $RECYCLE.BIN/
 config.yaml
 autoranker.py
 strikeManager.py
+cogs/gerber_renderer/render.py
