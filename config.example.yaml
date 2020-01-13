@@ -20,4 +20,7 @@ show_image:
   cse_cx: ""
 
 currency:
-  api_key: 
+  api_key:
+
+pricechecker:
+  api_token:

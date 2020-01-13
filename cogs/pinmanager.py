@@ -1,7 +1,6 @@
 import datetime
-from datetime import date
 import discord
-from discord import TextChannel, HTTPException, DMChannel
+from discord import DMChannel
 
 from config import get_section
 
