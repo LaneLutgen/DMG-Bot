@@ -12,6 +12,7 @@ class Pricechecker(commands.Cog):
         if not self.api_token: raise Exception("No API Token Specified.")
 
     @commands.command(aliases=["pc", "price"])
+    @commands.cooldown(3, 60, commands.BucketType.user)
     async def pricecheck(self, ctx, *, message: str):
         getresult = await self.getData(message)
         if getresult["status"] == "success":
@@ -37,9 +38,14 @@ class Pricechecker(commands.Cog):
                     js = await r.json()
                     return js
                 else: return None
+
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
-        if isinstance(error, commands.MissingRequiredArgument): await ctx.send("Please specify a game you want to search for")
+        if isinstance(error, commands.MissingRequiredArgument):
+            await ctx.send("Please specify a game you want to search for")
+        elif isinstance(error, commands.CommandOnCooldown):
+            await ctx.send('Sorry, the command is on cooldown for you right now. Try again in ' + str(int(error.retry_after)) + ' seconds')
+
 
 def setup(bot):
     bot.add_cog(Pricechecker(bot))

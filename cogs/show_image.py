@@ -29,7 +29,7 @@ class GoogleImageSearch(commands.Cog):
             await last_image.edit(content="[SNIP]", embed=None)
 
 
-    @commands.command(aliases=["image"])
+    @commands.command(aliases=["image", "i"])
     @commands.cooldown(3, 60, commands.BucketType.user)
     async def show(self, ctx, *, arg: str):
         """
