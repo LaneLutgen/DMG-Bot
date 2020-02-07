@@ -52,5 +52,3 @@ $ python3 GB_Bot.py
 ## Adding new extensions
 
 Simply create a new python module inside the `cogs` folder, the bot will automatically attempt to load it on startup. For an example, check out the dice rolling extension `cogs/dice.py` and the [discord.py documention](https://discordpy.readthedocs.io/en/latest/).
-
-Please be aware that this project is using the `rewrite` branch of discord.py, keep that in mind when browsing the documentation.
