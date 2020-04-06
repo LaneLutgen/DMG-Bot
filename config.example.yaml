@@ -12,7 +12,8 @@ bot:
     "cogs.stats",
     "cogs.gerber_renderer.render",
     "cogs.imgurAlbumHandler",
-    "cogs.pinmanager]
+    "cogs.pinmanager",
+    "cogs.api"]
 
 # Used by the show_image cog
 show_image:
@@ -24,3 +25,9 @@ currency:
 
 pricechecker:
   api_token:
+
+api:
+  guild:
+  pinnedChannel:
+  gitKey:
+  gitRepo:
