@@ -3,10 +3,9 @@ from datetime import timedelta
 import discord
 from discord.ext import commands
 import psutil
-import os
 import time
-
 start_time = time.time()
+
 
 class Stats(commands.Cog):
 	"""Reports server stats."""

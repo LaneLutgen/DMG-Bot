@@ -2,6 +2,7 @@ import aiohttp
 from discord.ext import commands
 from config import get_section
 
+
 class CurrencyConverter(commands.Cog):
     """Provides currency conversion functions."""
     

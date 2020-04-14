@@ -1,5 +1,6 @@
 from discord.ext import commands
 
+
 class imgurAlbumHandler(commands.Cog):
     """Keeps an eye on imgur album links and informs about them"""
 

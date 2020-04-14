@@ -1,8 +1,8 @@
 import aiohttp
 import discord
-
 from config import get_section
 from discord.ext import commands
+
 
 class Pricechecker(commands.Cog):
 
@@ -59,14 +59,6 @@ class Pricechecker(commands.Cog):
                     embed.add_field(name="Get more info about this game", value="https://www.pricecharting.com/game/" + str(getresult["products"][page]["id"]), inline=False)
                     await message.edit(embed=embed)
         else: await channel.send("Something went wrong, please try again")
-
-    @commands.Cog.listener()
-    async def on_command_error(self, ctx, error):
-        if isinstance(error, commands.MissingRequiredArgument):
-            await ctx.send("Please specify a game you want to search for")
-        elif isinstance(error, commands.CommandOnCooldown):
-            await ctx.send('Sorry, the command is on cooldown for you right now. Try again in ' + str(int(error.retry_after)) + ' seconds')
-
 
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload):

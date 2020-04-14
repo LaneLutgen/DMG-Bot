@@ -1,3 +1,4 @@
+psutil
 pygithub
 requests
 aiohttp

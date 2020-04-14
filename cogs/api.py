@@ -1,6 +1,4 @@
 import json
-
-import discord
 from github import Github
 import traceback
 from discord.ext import commands
@@ -8,6 +6,7 @@ from config import get_section
 from crontab import CronTab
 import asyncio
 import datetime
+
 
 class api(commands.Cog):
 
@@ -34,6 +33,8 @@ class api(commands.Cog):
         obj = []
         file = repo.get_contents("market.json")
         repo.update_file("market.json", str(datetime.datetime.now()), json.dumps(obj), file.sha)
+        eurl = ""
+        aurl = ""
         while True:
             async for msg in channel.history(limit=5000):
                 if(msg.pinned):
@@ -48,8 +49,6 @@ class api(commands.Cog):
                         for attachment in msg.attachments:
                             aurl.append(str(attachment.url))
 
-                    else:
-                        eurl = ""
                     tmp = {"user": str(msg.author), "message": str(msg.content), "created": str(msg.created_at), "avatar_url": str(msg.author.avatar_url), "message_id": str(msg.id), "embeds": str(eurl), "attachments": str(aurl)}
                     obj.append(tmp)
                     eurl = ""
