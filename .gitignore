@@ -209,3 +209,4 @@ config.yaml
 autoranker.py
 strikeManager.py
 cogs/gerber_renderer/render.py
+cogs/chocklocator.py
