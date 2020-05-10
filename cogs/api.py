@@ -6,6 +6,7 @@ from config import get_section
 from crontab import CronTab
 import asyncio
 import datetime
+import base64
 
 
 class api(commands.Cog):
@@ -23,6 +24,14 @@ class api(commands.Cog):
             print("Failed to run api task")
             traceback.format_exc()
 
+    @commands.Cog.listener()
+    async def on_message(self, message):
+        guild = self.bot.get_guild(id=int(get_section("api").get("guild")))
+        if message.channel == guild.get_channel(int(get_section("api").get("pinnedChannel"))):
+            if any([keyword in message.content.upper() for keyword in ('BUYING', 'SELLING', 'WTB', 'WTS')]):
+                await message.pin()
+
+
     async def getPins(self, interval):
         print("getPins Running")
         guild = self.bot.get_guild(id=int(get_section("api").get("guild")))
@@ -31,8 +40,6 @@ class api(commands.Cog):
         cron = CronTab(interval)
         repo = Github(get_section("api").get("gitKey")).get_repo(get_section("api").get("gitRepo"))
         obj = []
-        file = repo.get_contents("market.json")
-        repo.update_file("market.json", str(datetime.datetime.now()), json.dumps(obj), file.sha)
         eurl = ""
         aurl = ""
         while True:
@@ -49,16 +56,23 @@ class api(commands.Cog):
                         for attachment in msg.attachments:
                             aurl.append(str(attachment.url))
 
-                    tmp = {"user": str(msg.author), "message": str(msg.content), "created": str(msg.created_at), "avatar_url": str(msg.author.avatar_url), "message_id": str(msg.id), "embeds": str(eurl), "attachments": str(aurl)}
+                    tmp = {"user": str(msg.author), "message": str(msg.content), "created": str(msg.created_at), "avatar_url": str(msg.author.avatar_url), "message_id": str(msg.id), "embeds": str(eurl), "attachments": aurl}
                     obj.append(tmp)
                     eurl = ""
                     aurl = ""
             file = repo.get_contents("market.json")
-            repo.update_file("market.json", str(datetime.datetime.now()), json.dumps(obj), file.sha)
-            print("Updated market.json")
-            await asyncio.sleep(cron.next(default_utc=True))
-            obj.clear()
-            tmp.clear()
+            encode = base64.b64encode(str(json.dumps(obj)).encode("utf-8"))
+            if str(file.content).replace('\n', '') == str(encode, "utf-8"):
+                print("Data is unchanged, no commit was made")
+                await asyncio.sleep(cron.next(default_utc=True))
+                obj.clear()
+                tmp.clear()
+            else:
+                repo.update_file("market.json", str(datetime.datetime.now()), json.dumps(obj), file.sha)
+                print("Updated market.json")
+                await asyncio.sleep(cron.next(default_utc=True))
+                obj.clear()
+                tmp.clear()
 
 
 def setup(bot):
