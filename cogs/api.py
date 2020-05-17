@@ -28,7 +28,7 @@ class api(commands.Cog):
     async def on_message(self, message):
         guild = self.bot.get_guild(id=int(get_section("api").get("guild")))
         if message.channel == guild.get_channel(int(get_section("api").get("pinnedChannel"))):
-            if any([keyword in message.content.upper() for keyword in ('BUYING', 'SELLING', 'WTB', 'WTS')]):
+            if any([keyword in message.content.upper() for keyword in (':BUYING:', ':SELLING:', ':WTB:', ':WTS:', ':TRADING:', ':WTT:')]):
                 await message.pin()
 
 
