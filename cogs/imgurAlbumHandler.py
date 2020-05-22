@@ -10,12 +10,9 @@ class imgurAlbumHandler(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, ctx):
         """Keeps an eye on imgur album links and informs about them"""
-        if 'imgur.com/a/' in ctx.content:
+        if any([keyword in ctx.content.upper() for keyword in ('IMGUR.COM/A/', 'IMGUR.COM/GALLERY/')]):
             await ctx.channel.trigger_typing()
-            await ctx.channel.send("The link posted by " + ctx.author.mention + " contains an imgur album link, and may have more than one image")
-        if 'imgur.com/gallery/' in ctx.content:
-            await ctx.channel.trigger_typing()
-            await ctx.channel.send("The link posted by " + ctx.author.mention + " Contains an imgur album link, and may have more than one image")
-
+            await ctx.channel.send("The message posted by " + ctx.author.mention + " contains an imgur album link, it may have more than one image")
+            
 def setup(bot):
     bot.add_cog(imgurAlbumHandler(bot))
