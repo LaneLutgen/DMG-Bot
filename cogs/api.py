@@ -26,7 +26,7 @@ class api(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        guild = self.bot.get_guild(id=int(get_section("api").get("guild")))
+        guild = self.bot.get_guild(id=int(get_section("bot").get("guild")))
         if message.channel == guild.get_channel(int(get_section("api").get("pinnedChannel"))):
             if any([keyword in message.content.upper() for keyword in (':BUYING:', ':SELLING:', ':WTB:', ':WTS:', ':TRADING:', ':WTT:')]):
                 await message.pin()
@@ -34,7 +34,7 @@ class api(commands.Cog):
 
     async def getPins(self, interval):
         print("getPins Running")
-        guild = self.bot.get_guild(id=int(get_section("api").get("guild")))
+        guild = self.bot.get_guild(id=int(get_section("bot").get("guild")))
         channel = guild.get_channel(int(get_section("api").get("pinnedChannel")))
         await self.bot.wait_until_ready()
         cron = CronTab(interval)

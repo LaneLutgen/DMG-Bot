@@ -64,38 +64,16 @@ class Echo(commands.Cog):
 
     @commands.command()
     @has_at_least_role(least_role_needed)
-    async def edit(self, ctx, target_channel: TextChannel, target_message: str):
+    async def edit(self, ctx, message_link: str, *, edit: str):
         """Edits a given message in a given channel."""
+        msgstr = message_link.split("/")
+        guild = self.bot.get_guild(int(msgstr[4]))
+        channel = guild.get_channel(int(msgstr[5]))
+        message = await channel.fetch_message(int(msgstr[6]))
 
-        if not self.id_regex.match(target_message):
-            await ctx.send(f"⚠ {target_message} is not a valid message id!")
-            return
+        if message.author == self.bot.user:
+            await message.edit(content=edit)
 
-        message_to_edit = await target_channel.get_message(target_message)
-
-        cancel_prefixes = tuple(x + 'cancel' for x in ('!', '?'))
-
-        await ctx.send(f"✏ {message_to_edit.id} selected for editing. Please reply with the new content or use {'/'.join(cancel_prefixes)} to abort. Will cancel after 60 seconds.")
-
-        # Only allow editing by the person who initiated the edit request
-        def check(m):
-            return m.author == ctx.author
-
-        try:
-            new_message = await ctx.bot.wait_for('message', check=check, timeout=60)
-        except asyncio.TimeoutError:
-            await ctx.send("⚠ No edit made after 60 seconds, canceling.")
-        else:
-            try:
-                if new_message.content.startswith(cancel_prefixes):
-                    await ctx.send("ℹ Aborting edit.")
-                    return
-
-                await message_to_edit.edit(content=new_message.content)
-            except HTTPException:
-                await ctx.send("⚠ Failed to edit message.")
-            else:
-                await ctx.send("✅ Message edited succesfully.")
 
     @echo.error
     async def handle_edit_errors(self, ctx, error):
