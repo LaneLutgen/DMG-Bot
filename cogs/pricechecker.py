@@ -14,25 +14,27 @@ class Pricechecker(commands.Cog):
     @commands.command(aliases=["pc", "price"])
     @commands.cooldown(3, 60, commands.BucketType.user)
     async def pricecheck(self, ctx, *, message: str):
-        getresult = await self.getData(message)
-        if getresult["status"] == "success":
-            if not getresult["products"]: await ctx.send("No results found, please try redefining your search.")
+        products = await self.getProducts(message)
+        if products["status"] == "success":
+            if not products["products"]: await ctx.send("No results found, please try redefining your search.")
             else:
-                embed = discord.Embed(title=getresult["products"][0]["product-name"], color=discord.Color.teal())
-                embed.add_field(name="Console", value=getresult["products"][0]["console-name"], inline=False)
-                if getresult["products"][0]["loose-price"]/100 != 0.0: embed.add_field(name="Loose Price:", value="$"+str(getresult["products"][0]["loose-price"]/100), inline=True)
-                if getresult["products"][0]["cib-price"]/100 != 0.0: embed.add_field(name="CIB Price:", value="$"+str(getresult["products"][0]["cib-price"]/100), inline=True)
-                if getresult["products"][0]["new-price"]/100 != 0.0: embed.add_field(name="NEW Price:", value="$"+str(getresult["products"][0]["new-price"]/100), inline=True)
+                getresult = await self.getProduct(products["products"][0]["id"])
+                print(getresult)
+                embed = discord.Embed(title=getresult["product-name"], color=discord.Color.teal())
+                embed.add_field(name="Console", value=getresult["console-name"], inline=False)
+                if getresult["loose-price"]/100 != 0.0: embed.add_field(name="Loose Price:", value="$"+str(getresult["loose-price"]/100), inline=True)
+                if getresult["cib-price"]/100 != 0.0: embed.add_field(name="CIB Price:", value="$"+str(getresult["cib-price"]/100), inline=True)
+                if getresult["new-price"]/100 != 0.0: embed.add_field(name="NEW Price:", value="$"+str(getresult["new-price"]/100), inline=True)
                 embed.add_field(name="Search Query", value=message, inline=True)
-                embed.add_field(name="Result", value="1/" + str(len(getresult["products"])), inline=True)
-                embed.add_field(name="Get more info about this game", value="https://www.pricecharting.com/game/" + str(getresult["products"][0]["id"]), inline=False)
+                embed.add_field(name="Result", value="1/" + str(len(products["products"])), inline=True)
+                embed.add_field(name="Get more info about this game", value="https://www.pricecharting.com/game/" + str(products["products"][0]["id"]), inline=False)
                 await ctx.trigger_typing()
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction(emoji = "\u2B05")
                 await msg.add_reaction(emoji = "\u27A1")
         else: await ctx.send("Something went wrong, please try again")
 
-    async def getData(self, game):
+    async def getProducts(self, game):
         url = "https://www.pricecharting.com/api/products"
         payload = {"t": self.api_token, "q": game}
 
@@ -42,9 +44,20 @@ class Pricechecker(commands.Cog):
                     js = await r.json()
                     return js
                 else: return None
+                
+    async def getProduct(self, id):
+        url = "https://www.pricecharting.com/api/product"
+        payload = {"t": self.api_token, "id": id}
+        
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url, params=payload) as r:
+                if r.status == 200:
+                    js = await r.json()
+                    return js
+                else: return None
 
     async def changeCheckPage(self, search: str, channel: discord.TextChannel, message: discord.Message, author_id: int = "", page: int = 0):
-        getresult = await self.getData(search)
+        getresult = await self.getProducts(search)
         if getresult["status"] == "success":
             if not getresult["products"]: await channel.send("No results found, please try redefining your search.")
             else:
