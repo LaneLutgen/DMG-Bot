@@ -12,7 +12,7 @@ class Howlongtobeat(commands.Cog):
     @commands.command(aliases=["howlongtobeat"])
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def hltb(self, ctx, *, message: str):
-        results = await HowLongToBeat().search(message)
+        results = HowLongToBeat().search(message)
         if results is not None and len(results) > 0:
             best_element = max(results, key=lambda element: element.similarity)
             print(best_element)
@@ -21,4 +21,4 @@ class Howlongtobeat(commands.Cog):
 
 
 def setup(bot):
-    bot.add_cog(HowLongToBeat(bot))
+    bot.add_cog(Howlongtobeat(bot))
