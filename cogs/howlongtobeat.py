@@ -16,9 +16,13 @@ class Howlongtobeat(commands.Cog):
         if results is not None and len(results) > 0:
             best_element = max(results, key=lambda element: element.similarity)
             embed = discord.Embed(title=best_element.game_name, color=discord.Color.blue())
-            embed.add_field(name="Main Story", value=best_element.gameplay_main+" Hours", inline=True)
-            embed.add_field(name="Main + Extras", value=best_element.gameplay_main_extra +" Hours", inline=True)
-            embed.add_field(name="Completionist", value=best_element.gameplay_completionist +" Hours", inline=True)
+
+            if best_element.gameplay_main_unit is not None:
+                embed.add_field(name="Main Story", value=best_element.gameplay_main+" Hours", inline=True)
+            if best_element.gameplay_main_extra_unit is not None:
+                embed.add_field(name="Main + Extras", value=best_element.gameplay_main_extra +" Hours", inline=True)
+            if best_element.gameplay_completionist_unit is not None:
+                embed.add_field(name="Completionist", value=best_element.gameplay_completionist +" Hours", inline=True)
             embed.add_field(name="Get more info about this game", value=best_element.game_web_link, inline=False)
             await ctx.trigger_typing()
             msg = await ctx.send(embed=embed)
