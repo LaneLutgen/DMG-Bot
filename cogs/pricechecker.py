@@ -61,7 +61,7 @@ class Pricechecker(commands.Cog):
             if not getresult["products"]: await channel.send("No results found, please try redefining your search.")
             else:
                 if page <= int(len(getresult["products"])-1):
-                    embed = discord.Embed(title=getresult["products"][page]["product-name"], color=discord.Color.teal())
+                    embed = discord.Embed(title=getresult["products"][page]["product-name"], color=discord.Color.green())
                     embed.add_field(name="Console", value=getresult["products"][page]["console-name"], inline=False)
                     if getresult["products"][page]["loose-price"]/100 != 0.0: embed.add_field(name="Loose Price:", value="$"+str(getresult["products"][page]["loose-price"]/100), inline=True)
                     if getresult["products"][page]["cib-price"]/100 != 0.0: embed.add_field(name="CIB Price:", value="$"+str(getresult["products"][page]["cib-price"]/100), inline=True)
