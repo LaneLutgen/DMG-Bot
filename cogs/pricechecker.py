@@ -12,14 +12,13 @@ class Pricechecker(commands.Cog):
         if not self.api_token: raise Exception("No API Token Specified.")
 
     @commands.command(aliases=["pc", "price", "pricechart", "pricechecking", "pricecharting"])
-    @commands.cooldown(3, 60, commands.BucketType.user)
+    @commands.cooldown(1, 1, commands.BucketType.user)
     async def pricecheck(self, ctx, *, message: str):
         products = await self.getProducts(message)
         if products["status"] == "success":
             if not products["products"]: await ctx.send("No results found, please try redefining your search.")
             else:
                 getresult = await self.getProduct(products["products"][0]["id"])
-                print(getresult)
                 embed = discord.Embed(title=getresult["product-name"], color=discord.Color.teal())
                 embed.add_field(name="Console", value=getresult["console-name"], inline=False)
                 if getresult["loose-price"]/100 != 0.0: embed.add_field(name="Loose Price:", value="$"+str(getresult["loose-price"]/100), inline=True)
