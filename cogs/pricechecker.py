@@ -11,7 +11,7 @@ class Pricechecker(commands.Cog):
         self.api_token = get_section("pricechecker").get("api_token")
         if not self.api_token: raise Exception("No API Token Specified.")
 
-    @commands.command(aliases=["pc", "price"])
+    @commands.command(aliases=["pc", "price", "pricechart", "pricechecking", "pricecharting"])
     @commands.cooldown(3, 60, commands.BucketType.user)
     async def pricecheck(self, ctx, *, message: str):
         products = await self.getProducts(message)
