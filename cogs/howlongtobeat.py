@@ -20,7 +20,8 @@ class Howlongtobeat(commands.Cog):
             embed.add_field(name="Main + Extras", value=best_element.gameplay_main_extra +" Hours", inline=True)
             embed.add_field(name="Completionist", value=best_element.gameplay_completionist +" Hours", inline=True)
             embed.add_field(name="Get more info about this game", value=best_element.game_web_link, inline=False)
-            await message.edit(embed=embed)
+            await ctx.trigger_typing()
+            msg = await ctx.send(embed=embed)
         else:
             await ctx.send("No results found, please try redefining your search")
 
